@@ -1,0 +1,1 @@
+location folder mongo, postgres, rabbitmq
