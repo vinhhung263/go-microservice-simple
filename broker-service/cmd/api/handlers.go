@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"net/rpc"
 	"time"
@@ -59,7 +60,7 @@ func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-
+	log.Println("HandleSubmission start --> ")
 	switch requestPayload.Action {
 	case "auth":
 		app.authenticate(w, requestPayload.Auth)
@@ -179,6 +180,7 @@ func (app *Config) sendMail(w http.ResponseWriter, msg MailPayload) {
 
 	// make sure we get back the right status code
 	if response.StatusCode != http.StatusAccepted {
+		log.Println(response)
 		app.errorJSON(w, errors.New("error calling mail service"))
 		return
 	}

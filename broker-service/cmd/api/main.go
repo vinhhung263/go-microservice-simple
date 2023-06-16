@@ -11,7 +11,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-const webPort = "80"
+const webPort = "8080"
 const amqpURL = "amqp://guest:guest@rabbitmq"
 
 type Config struct {

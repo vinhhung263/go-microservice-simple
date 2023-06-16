@@ -45,7 +45,8 @@
     let mailBtn = document.getElementById("mailBtn");
     let logGBtn = document.getElementById("logGBtn");
     
-    const brokerURL = 'http://localhost:8080/';
+    const brokerURL = {{.BrokerURL}};
+    /* const brokerURL = 'http://localhost:8080/'; */
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
 

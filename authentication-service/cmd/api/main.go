@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	_ "github.com/jackc/pgconn"
@@ -19,8 +18,10 @@ const webPort = "80"
 var counts int64
 
 type Config struct {
-	DB     *sql.DB
-	Models data.Models
+	Repo   data.Repository
+	Client *http.Client
+	// DB     *sql.DB
+	// Models data.Models
 }
 
 func main() {
@@ -34,9 +35,12 @@ func main() {
 
 	// set up config
 	app := Config{
-		DB:     conn,
-		Models: data.New(conn),
+		// DB:     conn,
+		// Models: data.New(conn),
+		Client: &http.Client{},
 	}
+
+	app.setupRepo(conn)
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
@@ -64,7 +68,8 @@ func openDB(dsn string) (*sql.DB, error) {
 }
 
 func connectToDB() *sql.DB {
-	dsn := os.Getenv("DSN")
+	// dsn := os.Getenv("DSN")
+	dsn := "host=localhost port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 
 	for {
 		connection, err := openDB(dsn)
@@ -85,4 +90,9 @@ func connectToDB() *sql.DB {
 		time.Sleep(2 * time.Second)
 		continue
 	}
+}
+
+func (app *Config) setupRepo(conn *sql.DB) {
+	db := data.NewPostgresRepository(conn)
+	app.Repo = db
 }
